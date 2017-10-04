@@ -17,7 +17,7 @@ func TestPathMethodToName(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.tName, func(t *testing.T) {
-			got := pathMethodToName(test.path, test.method)
+			got := PathMethodToName(test.path, test.method)
 			if got != test.want {
 				t.Errorf("[%s] expected %q got %q", test.tName, test.want, got)
 			}
