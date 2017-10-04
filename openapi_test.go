@@ -12,6 +12,7 @@ func TestPathMethodToName(t *testing.T) {
 		{ "removes braces", "/one.{two}/[three]/(four)", "get", "GetOneTwoThreeFour" },
 		{ "removes trailing .json", "/one/two.json", "get", "GetOneTwo" },
 		{ "removes query", "/one/two?bad={param}", "get", "GetOneTwo" },
+		{ "removes query, braces, and .json", "/one/{two}.json?bad={param}", "get", "GetOneTwo" },
 	}
 
 	for _, test := range tests {

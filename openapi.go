@@ -387,19 +387,21 @@ func ProtoEnum(name string, enums []string, depth int) string {
 }
 
 func pathMethodToName(path, method string) string {
-	var name string
-	path = strings.TrimSuffix(path, ".json")
-	path = strings.Replace(path, "-", " ", -1)
-	path = strings.Replace(path, ".", " ", -1)
-	path = strings.Replace(path, "/", " ", -1)
-	// Strip out illegal-for-identifier characters in the path, including any query string.
-	// Note that query strings are illegal in swagger paths, but some tooling seems to tolerate them.
-	re := regexp.MustCompile(`[\{\}\[\]()/\.]|\?.*`)
-	path = re.ReplaceAllString(path, "")
-	for _, nme := range strings.Fields(path) {
-		name += strings.Title(nme)
+	// Remove any query string.  Note that query strings are illegal in swagger paths, but some
+	// tooling seems to tolerate them.
+	stripQuery := regexp.MustCompile(`\?.*`)
+	path = stripQuery.ReplaceAllString(path, "")
+	// Remove illegal-in-name characters, especially parameter placeholder markers, along with any
+	// noisy .json suffix.
+	badChars := regexp.MustCompile(`[][{}()]|\.json$`)
+	path = badChars.ReplaceAllString(path, "")
+	// Split the path on separator characters.
+	separators := regexp.MustCompile(`[-./ ]+`)
+	elements := separators.Split(path, -1)
+	for i, element := range elements {
+		elements[i] = strings.Title(element)
 	}
-	return strings.Title(method) + name
+	return strings.Title(method) + strings.Join(elements, "")
 }
 
 // ProtoMessage will return a protobuf message declaration
