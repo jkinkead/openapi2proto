@@ -187,13 +187,6 @@ func TestGenerateProto(t *testing.T) {
 		{
 			false,
 			false,
-			"fixtures/includes_query.json",
-
-			"fixtures/includes_query.proto",
-		},
-		{
-			false,
-			false,
 			"fixtures/lowercase_def.json",
 
 			"fixtures/lowercase_def.proto",
